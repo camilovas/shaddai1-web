@@ -1,8 +1,15 @@
+import { useLocation } from "react-router-dom";
 import content from "../content.json";
 import credits from "../credits.json";
 
+/** Cambiador flotante "Propuesta 1 · 2 · 3" (solo para la demo con el cliente).
+ *  Poner en false para quitarlo de las 3 propuestas, o borrar <Fx/> de App.jsx para quitar todos los extras. */
+export const SHOW_PROPOSAL_SWITCHER = true;
 export const { negocio, servicios, propuestas } = content;
 export const waUrl = `https://wa.me/${negocio.whatsapp}?text=${encodeURIComponent(negocio.mensaje)}`;
+/** WhatsApp con mensaje específico del servicio (si no se pasa, el genérico). */
+export const waUrlFor = (s) => `https://wa.me/${negocio.whatsapp}?text=${encodeURIComponent((s && s.waMensaje) || negocio.mensaje)}`;
+export const SITE = negocio.seo.sitio;
 export const telUrl = `tel:+${negocio.whatsapp}`;
 export const path = (prop, sub = "") => `/${prop}/${sub ? sub + "/" : ""}`;
 export const getServicio = (slug) => servicios.find((s) => s.slug === slug);
@@ -79,14 +86,44 @@ export function WhatsAppFab() {
 }
 
 export function Schema() {
-  const data = {
+  const { pathname } = useLocation();
+  const m = metaFor(pathname);
+  const data = [];
+  const org = {
     "@context": "https://schema.org",
     "@type": "AutoRepair",
+    "@id": `${SITE}#taller`,
     name: negocio.nombre,
-    description: negocio.lema,
+    description: `${negocio.lema}. ${negocio.subtitulo}`,
     telephone: `+${negocio.whatsapp}`,
+    url: SITE,
     makesOffer: servicios.map((s) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name: s.nombre } })),
   };
+  // Solo se agregan datos reales: si el campo esta vacio, se omite.
+  const pe = negocio.pendientes || {};
+  if (pe.direccion || pe.ciudad) org.address = { "@type": "PostalAddress", ...(pe.direccion && { streetAddress: pe.direccion }), ...(pe.ciudad && { addressLocality: pe.ciudad }) };
+  if (pe.ciudad) org.areaServed = pe.ciudad;
+  if (pe.horario) org.openingHours = pe.horario;
+  const sameAs = [pe.googleBusinessUrl, pe.instagram, pe.facebook].filter(Boolean);
+  if (sameAs.length) org.sameAs = sameAs;
+  data.push(org);
+  if (m.servicio) {
+    const s = m.servicio;
+    data.push({
+      "@context": "https://schema.org",
+      "@type": "Service",
+      name: s.nombre,
+      description: s.descripcion,
+      serviceType: s.nombre,
+      provider: { "@id": `${SITE}#taller` },
+    });
+    if (s.faq?.length)
+      data.push({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: s.faq.map((f) => ({ "@type": "Question", name: f.p, acceptedAnswer: { "@type": "Answer", text: f.r } })),
+      });
+  }
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
 }
 
@@ -111,16 +148,20 @@ export function Credits({ className }) {
   );
 }
 
-/** Título y descripción por ruta (SSR y navegación en el cliente). */
+/** Titulo, descripcion, URL absoluta e imagen OG por ruta (SSR y cliente).
+ *  Las propuestas son borradores: noindex = true. Para publicar la elegida, ver docs/marketing.md. */
 export function metaFor(pathname) {
   const parts = pathname.replace(/^\/|\/$/g, "").split("/");
   const prop = propuestas.find((p) => p.slug === parts[0]);
-  if (!prop) return { title: "Shaddai 1 — Propuestas de sitio web", description: "Tres propuestas de diseño para Shaddai 1, mecánica automotriz multimarcas.", noindex: true };
+  const noindex = true; // QUITAR (false) solo en la propuesta elegida
+  if (!prop) return { title: "Shaddai 1 — Propuestas de sitio web", description: "Tres propuestas de diseño para Shaddai 1, mecánica automotriz multimarcas.", noindex, url: SITE, image: `${SITE}brand/og-propuesta-1.png` };
   const sub = parts[1];
-  if (!sub) return { title: `Shaddai 1 · ${negocio.lema} | Propuesta ${prop.id}`, description: negocio.aviso, noindex: true };
-  if (sub === "contacto") return { title: `Contacto y WhatsApp | Shaddai 1 · Propuesta ${prop.id}`, description: `Escríbenos por WhatsApp al ${negocio.telefono} para programar tu servicio.`, noindex: true };
+  const url = `${SITE}${prop.slug}/${sub ? sub + "/" : ""}`;
+  const image = `${SITE}brand/og-${prop.slug}.png`;
+  if (!sub) return { title: `Taller mecánico multimarcas · Escaneo y reprogramación | Shaddai 1`, description: `Shaddai 1, mecánica automotriz multimarcas: mecánica general, escaneo de sistemas, reprogramación y mantenimiento. Programa con anticipación por WhatsApp ${negocio.telefono}.`, noindex, url, image };
+  if (sub === "contacto") return { title: `Contacto y WhatsApp | Shaddai 1 taller multimarcas`, description: `Escríbenos por WhatsApp al ${negocio.telefono} para programar tu servicio, revisión o mantenimiento. Cuéntanos la marca de tu vehículo.`, noindex, url, image };
   const s = getServicio(sub);
   return s
-    ? { title: `${s.nombre} | Shaddai 1 · Propuesta ${prop.id}`, description: `${s.corto} Shaddai 1, mecánica automotriz multimarcas. WhatsApp ${negocio.telefono}.`, noindex: true }
-    : { title: "Página no encontrada | Shaddai 1", description: "", noindex: true };
+    ? { title: `${s.titular || s.nombre} | Shaddai 1`, description: `${s.problema} ${s.nombre} en Shaddai 1, taller multimarcas. Programa por WhatsApp ${negocio.telefono}.`, noindex, url, image, servicio: s }
+    : { title: "Página no encontrada | Shaddai 1", description: "", noindex: true, url, image };
 }

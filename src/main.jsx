@@ -4,7 +4,7 @@ import App from "./App.jsx";
 
 hydrateRoot(
   document.getElementById("root"),
-  <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+  <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, "")} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
     <App />
   </BrowserRouter>
 );

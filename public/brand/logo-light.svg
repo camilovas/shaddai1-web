@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 150" role="img" aria-label="Shaddai 1 - Mecánica Automotriz Multimarcas">
+<title>Shaddai 1</title>
+<path d="M30 58C110 14 250 8 360 24C300 20 160 26 30 58Z" fill="#d6001c"/>
+<path d="M70 52C150 22 260 18 330 28C260 28 170 34 70 52Z" fill="#111114" opacity=".85"/>
+<g transform="translate(430 0) skewX(-14)" font-family="'Arial Black','Segoe UI Black','Helvetica Neue',Impact,system-ui,sans-serif" font-weight="900">
+<text x="-380" y="106" font-size="76" fill="#111114" textLength="360" lengthAdjust="spacingAndGlyphs">SHADDAI</text>
+<text x="-8" y="106" font-size="76" fill="#d6001c" textLength="44" lengthAdjust="spacingAndGlyphs">1</text>
+</g>
+<g transform="translate(512 62)"><path d="M22.7 -4.0 L29.9 -2.8 L29.9 2.8 L22.7 4.0 L20.7 10.1 L25.8 15.3 L22.5 19.8 L16.0 16.5 L10.8 20.3 L11.9 27.5 L6.5 29.3 L3.2 22.8 L-3.2 22.8 L-6.5 29.3 L-11.9 27.5 L-10.8 20.3 L-16.0 16.5 L-22.5 19.8 L-25.8 15.3 L-20.7 10.1 L-22.7 4.0 L-29.9 2.8 L-29.9 -2.8 L-22.7 -4.0 L-20.7 -10.1 L-25.8 -15.3 L-22.5 -19.8 L-16.0 -16.5 L-10.8 -20.3 L-11.9 -27.5 L-6.5 -29.3 L-3.2 -22.8 L3.2 -22.8 L6.5 -29.3 L11.9 -27.5 L10.8 -20.3 L16.0 -16.5 L22.5 -19.8 L25.8 -15.3 L20.7 -10.1Z" fill="none" stroke="#8a8a92" stroke-width="5" stroke-linejoin="round"/>
+<path d="M-11 -11L11 11M11 -11L-11 11" stroke="#d6001c" stroke-width="6" stroke-linecap="round"/></g>
+<text x="80" y="138" font-family="system-ui,'Segoe UI',Arial,sans-serif" font-weight="700" font-size="19" fill="#111114" textLength="400" lengthAdjust="spacing">MECÁNICA AUTOMOTRIZ MULTIMARCAS</text>
+</svg>

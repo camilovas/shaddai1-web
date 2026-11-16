@@ -1,51 +1,51 @@
-import { Link, NavLink, Outlet, useParams } from "react-router-dom";
-import { negocio, servicios, path, waUrl, telUrl, Picture, Icon, WhatsAppFab, Schema, Credits, getServicio } from "../components/shared.jsx";
-import ServiceBody from "../components/ServiceBody.jsx";
+import { Link, Outlet, useParams } from "react-router-dom";
+import { negocio, servicios, propuestas, path, waUrl, waUrlFor, telUrl, BASE, Picture, Icon, WhatsAppFab, Schema, getServicio } from "../components/shared.jsx";
+import ServiceBody, { ServiceNotFound } from "../components/ServiceBody.jsx";
+import NavMenu from "../components/NavMenu.jsx";
+import Footer from "../components/Footer.jsx";
+import Crumbs from "../components/Crumbs.jsx";
+import ContactBody from "../components/Contact.jsx";
 import "./p2.css";
 
 const P = "propuesta-2";
-const CONFIANZA = ["Todas las marcas", "Diagnóstico con escáner", "Programación de módulos", "Programa con anticipación"];
+const hero = propuestas[1].hero;
+const short = (n) => n.replace(" Preventivo y Correctivo", "");
+const NAV = [
+  { to: path(P), label: "Inicio" },
+  ...servicios.map((s) => ({ to: path(P, s.slug), label: short(s.nombre) })),
+  { to: path(P, "contacto"), label: "Contacto" },
+];
+/** Resalta una frase del titular sin depender de que exista. */
+function Emph({ text, phrase }) {
+  const i = text.indexOf(phrase);
+  if (i < 0) return text;
+  return (
+    <>
+      {text.slice(0, i)}
+      <span>{phrase}</span>
+      {text.slice(i + phrase.length)}
+    </>
+  );
+}
 
 export function Layout() {
   return (
-    <div className="p2">
+    <div className="p2" style={{ "--pat": `url(${BASE}brand/pattern-stripes-red.svg)`, "--grain": `url(${BASE}brand/pattern-grain.svg)` }}>
       <a className="skip" href="#main">
         Saltar al contenido
       </a>
       <header className="p2-head">
         <div className="p2-wrap p2-head-in">
-          <Link to={path(P)} className="p2-brand" aria-label="Shaddai 1, inicio">
-            <span className="p2-mark" aria-hidden="true">S1</span>
-            <span>
-              <b>Shaddai 1</b>
-              <small>{negocio.lema}</small>
-            </span>
+          <Link to={path(P)} className="p2-brand" aria-label="Shaddai 1, mecánica automotriz multimarcas, inicio">
+            <img src={`${BASE}brand/logo-dark.svg`} alt="" width="168" height="45" />
           </Link>
-          <nav aria-label="Principal" className="p2-nav">
-            <NavLink to={path(P)} end>Inicio</NavLink>
-            {servicios.map((s) => (
-              <NavLink key={s.slug} to={path(P, s.slug)}>
-                {s.nombre.replace(" Preventivo y Correctivo", "")}
-              </NavLink>
-            ))}
-            <NavLink to={path(P, "contacto")}>Contacto</NavLink>
-          </nav>
+          <NavMenu items={NAV} />
         </div>
       </header>
       <main id="main">
         <Outlet />
       </main>
-      <footer className="p2-foot">
-        <div className="p2-wrap">
-          <p>
-            <b>Shaddai 1</b> · {negocio.lema} · WhatsApp{" "}
-            <a href={waUrl} target="_blank" rel="noopener">{negocio.telefono}</a>
-          </p>
-          <p>{negocio.gracias}</p>
-          <Credits className="p2-credits" />
-          <p className="p2-credits">Propuesta 2 de 3 · <Link to="/">Ver otras propuestas</Link></p>
-        </div>
-      </footer>
+      <Footer x="p2" n={2} />
       <WhatsAppFab />
       <Schema />
     </div>
@@ -53,19 +53,21 @@ export function Layout() {
 }
 
 export function Home() {
+  const conf = negocio.confianza;
+  const c = negocio.comoCoordinar;
   return (
     <>
       <section className="p2-hero">
         <div className="p2-wrap p2-hero-in">
           <div className="p2-hero-text">
-            <p className="p2-eyebrow">Mecánica automotriz multimarcas</p>
+            <p className="p2-eyebrow">{negocio.lema}</p>
             <h1>
-              Tu vehículo en <span>buenas manos</span>
+              <Emph text={hero.titular} phrase="claro y confiable" />
             </h1>
-            <p className="p2-lead">{negocio.aviso}</p>
+            <p className="p2-lead">{hero.subtitulo}</p>
             <div className="p2-actions">
               <a className="p2-btn p2-btn-red" href={waUrl} target="_blank" rel="noopener">
-                <Icon name="wa" size={22} /> Programar por WhatsApp
+                <Icon name="wa" size={22} /> {negocio.ctas.principal}
               </a>
               <a className="p2-btn p2-btn-line" href="#servicios">Ver servicios</a>
             </div>
@@ -76,17 +78,23 @@ export function Home() {
         </div>
       </section>
 
-      <section className="p2-trust" aria-label="Por qué elegirnos">
-        <ul className="p2-wrap">
-          {CONFIANZA.map((c) => (
-            <li key={c}>{c}</li>
-          ))}
-        </ul>
+      <section className="p2-trust" aria-labelledby="p2-trust-h">
+        <div className="p2-wrap">
+          <h2 className="p2-h2" id="p2-trust-h">{conf.titulo}</h2>
+          <ul className="p2-trust-l">
+            {conf.puntos.map((p) => (
+              <li key={p.titulo}>
+                <h3>{p.titulo}</h3>
+                <p>{p.texto}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
 
-      <section className="p2-services" id="servicios">
+      <section className="p2-services" id="servicios" aria-labelledby="p2-serv-h">
         <div className="p2-wrap">
-          <h2 className="p2-h2">Servicios</h2>
+          <h2 className="p2-h2" id="p2-serv-h">Servicios</h2>
           <ul className="p2-grid">
             {servicios.map((s) => (
               <li key={s.slug}>
@@ -96,8 +104,8 @@ export function Home() {
                     <h3>
                       <Icon name={s.icono} size={22} /> {s.nombre}
                     </h3>
-                    <p>{s.corto}</p>
-                    <span>Ver detalle →</span>
+                    <p>{s.problema}</p>
+                    <span>Ver detalle <span aria-hidden="true">→</span></span>
                   </div>
                 </Link>
               </li>
@@ -106,13 +114,31 @@ export function Home() {
         </div>
       </section>
 
-      <section className="p2-band">
+      <section className="p2-how" aria-labelledby="p2-how-h">
         <div className="p2-wrap">
-          <h2>Programa con anticipación</h2>
-          <p>Para tus servicios, revisiones y mantenimientos. {negocio.gracias}</p>
-          <a className="p2-btn p2-btn-white" href={waUrl} target="_blank" rel="noopener">
-            <Icon name="wa" size={22} /> {negocio.telefono}
-          </a>
+          <h2 className="p2-h2" id="p2-how-h">{c.titulo}</h2>
+          <p className="p2-how-i">{c.intro}</p>
+          <ol className="p2-steps">
+            {c.pasos.map((p) => (
+              <li key={p.titulo}>
+                <h3>{p.titulo}</h3>
+                <p>{p.texto}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="p2-band" aria-labelledby="p2-band-h">
+        <div className="p2-wrap">
+          <h2 id="p2-band-h">{negocio.titular}</h2>
+          <p>{c.nota} {conf.cierre}</p>
+          <div className="p2-actions p2-actions-c">
+            <a className="p2-btn p2-btn-white" href={waUrl} target="_blank" rel="noopener">
+              <Icon name="wa" size={22} /> {negocio.telefono}
+            </a>
+            <a className="p2-btn p2-btn-ghost-w" href={telUrl}>{negocio.ctas.llamar}</a>
+          </div>
         </div>
       </section>
     </>
@@ -121,20 +147,21 @@ export function Home() {
 
 export function Service() {
   const s = getServicio(useParams().servicio);
-  if (!s) return <div className="p2-wrap p2-pad"><h1>Servicio no encontrado</h1><Link to={path(P)}>Volver al inicio</Link></div>;
+  if (!s) return <ServiceNotFound prop={P} wrap="p2-wrap p2-pad" />;
   return (
     <>
       <section className="p2-hero p2-hero-s">
         <div className="p2-wrap p2-hero-in">
           <div className="p2-hero-text">
-            <p className="p2-crumb">
-              <Link to={path(P)}>Inicio</Link> / Servicios
+            <Crumbs items={[{ to: path(P), label: "Inicio" }]} current={s.nombre} />
+            <p className="p2-eyebrow">
+              <Icon name={s.icono} size={18} /> {s.nombre}
             </p>
-            <h1>{s.nombre}</h1>
+            <h1>{s.titular}</h1>
             <p className="p2-lead">{s.corto}</p>
             <div className="p2-actions">
-              <a className="p2-btn p2-btn-red" href={waUrl} target="_blank" rel="noopener">
-                <Icon name="wa" size={22} /> Consultar por WhatsApp
+              <a className="p2-btn p2-btn-red" href={waUrlFor(s)} target="_blank" rel="noopener">
+                <Icon name="wa" size={22} /> {s.cta}
               </a>
             </div>
           </div>
@@ -153,14 +180,7 @@ export function Service() {
 export function Contact() {
   return (
     <div className="p2-wrap p2-pad">
-      <h1 className="p2-h2">Contacto</h1>
-      <p className="p2-lead">{negocio.aviso}</p>
-      <div className="p2-actions">
-        <a className="p2-btn p2-btn-red" href={waUrl} target="_blank" rel="noopener">
-          <Icon name="wa" size={22} /> WhatsApp {negocio.telefono}
-        </a>
-        <a className="p2-btn p2-btn-line" href={telUrl}>Llamar</a>
-      </div>
+      <ContactBody home={path(P)} cls={{ h1: "p2-h2", lead: "p2-lead", wa: "p2-btn p2-btn-red", call: "p2-btn p2-btn-line" }} />
     </div>
   );
 }

@@ -23,6 +23,8 @@ Rojo intenso (~#D6001C), negro/grafito (~#0D0D0F), blanco, amarillo de énfasis 
 - **Stack:** React 18 + Vite + react-router. `npm run build` prerenderiza (SSR) un `index.html` estático por ruta en `dist/`.
 - **Python local** para el tooling: `tools/fetch_photos.py` (descarga y optimiza fotos) y `tools/gen_content.py` (fuente única del contenido → `src/content.json`). Editar el contenido en Python, no en el JSON.
 - **Docker:** `docker compose up --build` sirve `dist/` con nginx en http://localhost:8080.
+- **Marca y SEO:** `tools/make_assets.py` genera logos, favicon, imágenes OG y patrones en `public/brand/`; `tools/check_contrast.py` valida contraste WCAG. Guías en `docs/design.md` y `docs/marketing.md` (incluye lo que falta pedir al cliente y cómo quitar `noindex`).
+- **Extras de experiencia** (`src/components/fx/*`, `src/hooks/*`, `src/fx.css`): asistente de mensaje de WhatsApp, revelado al scroll, copiar número, cambiador de propuesta (`SHOW_PROPOSAL_SWITCHER` en `shared.jsx`, ponerlo en `false` al elegir diseño), progreso de lectura, view transitions, prefetch y manifest PWA. Todo es mejora progresiva y no debe causar warnings de hidratación.
 - **Publicación: GitHub Pages** (workflow `.github/workflows/deploy.yml`, rama `main`). Se compila con `BASE=/shaddai1-web/`; en Docker/local `BASE` es `/`. Todo enlace y asset debe respetar la base (`BASE` en `shared.jsx`, `Link` de react-router); nunca rutas absolutas `/img/...`.
 - **Todo local:** sin CDN, sin fuentes web, sin hotlinking. Solo fuentes del sistema.
 - Cada propuesta vive en `src/proposals/PN.jsx` + `pN.css`; el cuerpo de las páginas de servicio es compartido (`src/components/ServiceBody.jsx`, clases `.sb-*`).

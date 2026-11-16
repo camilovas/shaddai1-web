@@ -1,15 +1,33 @@
-import { Link, NavLink, Outlet, useParams } from "react-router-dom";
-import { negocio, servicios, path, waUrl, telUrl, Picture, Icon, WhatsAppFab, Schema, Credits, getServicio } from "../components/shared.jsx";
-import ServiceBody from "../components/ServiceBody.jsx";
+import { Link, Outlet, useParams } from "react-router-dom";
+import { negocio, servicios, propuestas, path, waUrl, waUrlFor, telUrl, BASE, Picture, Icon, WhatsAppFab, Schema, getServicio } from "../components/shared.jsx";
+import ServiceBody, { ServiceNotFound } from "../components/ServiceBody.jsx";
+import NavMenu from "../components/NavMenu.jsx";
+import Footer from "../components/Footer.jsx";
+import Crumbs from "../components/Crumbs.jsx";
+import ContactBody from "../components/Contact.jsx";
 import "./p3.css";
 
 const P = "propuesta-3";
+const hero = propuestas[2].hero;
 const pad = (n) => String(n).padStart(2, "0");
+const short = (n) => n.replace(" Preventivo y Correctivo", "");
+const NAV = [
+  { to: path(P), label: "Inicio" },
+  ...servicios.map((s, i) => ({
+    to: path(P, s.slug),
+    label: (
+      <>
+        <i>{pad(i + 1)}</i> {short(s.nombre)}
+      </>
+    ),
+  })),
+  { to: path(P, "contacto"), label: "Contacto" },
+];
 
 function Gauge() {
   return (
     <svg className="p3-gauge" viewBox="0 0 200 120" aria-hidden="true" focusable="false">
-      <path d="M20 110a80 80 0 0 1 160 0" fill="none" stroke="#2f3037" strokeWidth="14" strokeLinecap="round" />
+      <path d="M20 110a80 80 0 0 1 160 0" fill="none" stroke="#3a3d47" strokeWidth="14" strokeLinecap="round" />
       <path d="M20 110a80 80 0 0 1 112-73" fill="none" stroke="#d6001c" strokeWidth="14" strokeLinecap="round" />
       <path d="M100 110L146 56" stroke="#ffe600" strokeWidth="4" strokeLinecap="round" />
       <circle cx="100" cy="110" r="8" fill="#ffe600" />
@@ -19,42 +37,23 @@ function Gauge() {
 
 export function Layout() {
   return (
-    <div className="p3">
+    <div className="p3" style={{ "--pat": `url(${BASE}brand/pattern-grid.svg)` }}>
       <a className="skip" href="#main">
         Saltar al contenido
       </a>
       <header className="p3-head">
         <div className="p3-wrap p3-head-in">
-          <Link to={path(P)} className="p3-brand" aria-label="Shaddai 1, inicio">
+          <Link to={path(P)} className="p3-brand" aria-label="Shaddai 1, mecánica automotriz multimarcas, inicio">
             <span className="p3-dot" aria-hidden="true" />
-            <b>SHADDAI 1</b>
-            <small>{negocio.lema}</small>
+            <img src={`${BASE}brand/logo-dark.svg`} alt="" width="168" height="45" />
           </Link>
-          <nav aria-label="Principal" className="p3-nav">
-            <NavLink to={path(P)} end>Inicio</NavLink>
-            {servicios.map((s, i) => (
-              <NavLink key={s.slug} to={path(P, s.slug)}>
-                <i>{pad(i + 1)}</i> {s.nombre.replace(" Preventivo y Correctivo", "")}
-              </NavLink>
-            ))}
-            <NavLink to={path(P, "contacto")}>Contacto</NavLink>
-          </nav>
+          <NavMenu items={NAV} />
         </div>
       </header>
       <main id="main">
         <Outlet />
       </main>
-      <footer className="p3-foot">
-        <div className="p3-wrap">
-          <p>
-            SHADDAI 1 · {negocio.lema} · WhatsApp{" "}
-            <a href={waUrl} target="_blank" rel="noopener">{negocio.telefono}</a>
-          </p>
-          <p>{negocio.gracias}</p>
-          <Credits className="p3-credits" />
-          <p className="p3-credits">Propuesta 3 de 3 · <Link to="/">Ver otras propuestas</Link></p>
-        </div>
-      </footer>
+      <Footer x="p3" n={3} />
       <WhatsAppFab />
       <Schema />
     </div>
@@ -62,16 +61,19 @@ export function Layout() {
 }
 
 export function Home() {
+  const [a, ...rest] = hero.titular.split(", ");
+  const conf = negocio.confianza;
+  const c = negocio.comoCoordinar;
   return (
     <>
       <section className="p3-hero">
         <div className="p3-wrap p3-hero-in">
           <div>
-            <p className="p3-label">// MECÁNICA AUTOMOTRIZ MULTIMARCAS</p>
+            <p className="p3-label">// {negocio.lema.toUpperCase()}</p>
             <h1>
-              Diagnóstico claro. <mark>Servicio a tiempo.</mark>
+              {rest.length ? <>{a}, <mark>{rest.join(", ")}</mark></> : hero.titular}
             </h1>
-            <p className="p3-lead">{negocio.aviso}</p>
+            <p className="p3-lead">{hero.subtitulo}</p>
             <ul className="p3-chips" aria-label="Especialidades">
               <li>Multimarcas</li>
               <li>Escaneo de sistemas</li>
@@ -79,7 +81,7 @@ export function Home() {
             </ul>
             <div className="p3-actions">
               <a className="p3-btn p3-btn-y" href={waUrl} target="_blank" rel="noopener">
-                <Icon name="wa" size={22} /> Programar por WhatsApp
+                <Icon name="wa" size={22} /> {negocio.ctas.principal}
               </a>
               <a className="p3-btn p3-btn-l" href="#servicios">Ver servicios</a>
             </div>
@@ -91,10 +93,26 @@ export function Home() {
         </div>
       </section>
 
-      <section className="p3-services" id="servicios">
+      <section className="p3-trust" aria-labelledby="p3-trust-h">
+        <div className="p3-wrap">
+          <p className="p3-label">// CONFIANZA</p>
+          <h2 className="p3-h2" id="p3-trust-h">{conf.titulo}</h2>
+          <ul className="p3-spec">
+            {conf.puntos.map((p, i) => (
+              <li key={p.titulo}>
+                <span className="p3-spec-n" aria-hidden="true">{pad(i + 1)}</span>
+                <h3>{p.titulo}</h3>
+                <p>{p.texto}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="p3-services" id="servicios" aria-labelledby="p3-serv-h">
         <div className="p3-wrap">
           <p className="p3-label">// SERVICIOS</p>
-          <h2 className="p3-h2">Cuatro servicios, un solo taller</h2>
+          <h2 className="p3-h2" id="p3-serv-h">Cuatro servicios, un solo taller</h2>
           <ul className="p3-rows">
             {servicios.map((s, i) => (
               <li key={s.slug}>
@@ -113,15 +131,22 @@ export function Home() {
         </div>
       </section>
 
-      <section className="p3-process">
+      <section className="p3-process" aria-labelledby="p3-proc-h">
         <div className="p3-wrap">
           <p className="p3-label">// CÓMO FUNCIONA</p>
+          <h2 className="p3-h2" id="p3-proc-h">{c.titulo}</h2>
           <ol>
-            <li><b>Escríbenos</b><span>WhatsApp {negocio.telefono}</span></li>
-            <li><b>Programa</b><span>Con anticipación, para atenderte oportunamente</span></li>
-            <li><b>Revisamos</b><span>Tu vehículo, sea cual sea la marca</span></li>
+            {c.pasos.map((p) => (
+              <li key={p.titulo}><b>{p.titulo}</b><span>{p.texto}</span></li>
+            ))}
           </ol>
-          <p className="p3-thanks">{negocio.gracias}</p>
+          <div className="p3-process-cta">
+            <a className="p3-btn p3-btn-y" href={waUrl} target="_blank" rel="noopener">
+              <Icon name="wa" size={22} /> {negocio.ctas.contacto}
+            </a>
+            <a className="p3-btn p3-btn-l" href={telUrl}>{negocio.ctas.llamar}</a>
+          </div>
+          <p className="p3-thanks">{conf.cierre}</p>
         </div>
       </section>
     </>
@@ -131,19 +156,20 @@ export function Home() {
 export function Service() {
   const { servicio } = useParams();
   const s = getServicio(servicio);
-  if (!s) return <div className="p3-wrap p3-pad"><h1>Servicio no encontrado</h1><Link to={path(P)}>Volver al inicio</Link></div>;
+  if (!s) return <ServiceNotFound prop={P} wrap="p3-wrap p3-pad" />;
   const i = servicios.indexOf(s) + 1;
   return (
     <>
       <section className="p3-hero p3-hero-s">
         <div className="p3-wrap p3-hero-in">
           <div>
-            <p className="p3-label">// SERVICIO {pad(i)} / {pad(servicios.length)}</p>
-            <h1>{s.nombre}</h1>
+            <Crumbs items={[{ to: path(P), label: "Inicio" }]} current={s.nombre} />
+            <p className="p3-label">// SERVICIO {pad(i)} / {pad(servicios.length)} · {s.nombre.toUpperCase()}</p>
+            <h1>{s.titular}</h1>
             <p className="p3-lead">{s.corto}</p>
             <div className="p3-actions">
-              <a className="p3-btn p3-btn-y" href={waUrl} target="_blank" rel="noopener">
-                <Icon name="wa" size={22} /> Consultar por WhatsApp
+              <a className="p3-btn p3-btn-y" href={waUrlFor(s)} target="_blank" rel="noopener">
+                <Icon name="wa" size={22} /> {s.cta}
               </a>
             </div>
           </div>
@@ -162,15 +188,7 @@ export function Service() {
 export function Contact() {
   return (
     <div className="p3-wrap p3-pad">
-      <p className="p3-label">// CONTACTO</p>
-      <h1 className="p3-h2">Programa tu servicio</h1>
-      <p className="p3-lead">{negocio.aviso}</p>
-      <div className="p3-actions">
-        <a className="p3-btn p3-btn-y" href={waUrl} target="_blank" rel="noopener">
-          <Icon name="wa" size={22} /> WhatsApp {negocio.telefono}
-        </a>
-        <a className="p3-btn p3-btn-l" href={telUrl}>Llamar</a>
-      </div>
+      <ContactBody home={path(P)} cls={{ h1: "p3-h2", lead: "p3-lead", wa: "p3-btn p3-btn-y", call: "p3-btn p3-btn-l" }} />
     </div>
   );
 }

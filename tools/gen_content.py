@@ -65,6 +65,114 @@ PROPUESTAS = [
      "descripcion": "Grafito con detalles amarillos, numeración y estilo de tablero de instrumentos."},
 ]
 
+# ---------------------------------------------------------------------------
+# MARKETING (solo se AGREGAN campos; nada de lo anterior se renombra).
+# Regla: nada de precios, horarios, direccion, anos de experiencia, certificaciones,
+# resenas, cifras ni garantias. Lo que falte va en negocio["pendientes"] (vacio).
+# ---------------------------------------------------------------------------
+NEGOCIO.update({
+    "titular": "Programa con anticipación el servicio de tu vehículo",
+    "subtitulo": "Mecánica automotriz multimarcas: escaneo de sistemas, reprogramación, mantenimiento y reparación. Escríbenos por WhatsApp.",
+    "ctas": {
+        "principal": "Programar por WhatsApp",
+        "agendar": "Agenda tu revisión",
+        "cotizar": "Consultar por WhatsApp",
+        "llamar": "Llamar ahora",
+        "servicio": "Pregunta por este servicio",
+        "contacto": "Escríbenos al 300 145 80 18",
+    },
+    "comoCoordinar": {
+        "titulo": "Cómo coordinar tu servicio",
+        "intro": "Es simple y todo empieza por WhatsApp.",
+        "pasos": [
+            {"titulo": "Escríbenos", "texto": "Cuéntanos por WhatsApp la marca de tu vehículo y qué necesitas (revisión, diagnóstico, mantenimiento)."},
+            {"titulo": "Programa con anticipación", "texto": "Coordinamos tu servicio con tiempo para poder atenderte oportunamente."},
+            {"titulo": "Trae tu vehículo", "texto": "Lo revisamos y te explicamos lo que encontramos antes de continuar."},
+        ],
+        "nota": "Programar con anticipación nos ayuda a atenderte mejor.",
+    },
+    "confianza": {
+        "titulo": "Por qué escribirnos",
+        "puntos": [
+            {"titulo": "Todas las marcas", "texto": "Mecánica automotriz multimarcas."},
+            {"titulo": "Diagnóstico con escáner", "texto": "Lectura de sistemas para ubicar la falla sin adivinar."},
+            {"titulo": "Reprogramación", "texto": "Programación de módulos electrónicos del vehículo."},
+            {"titulo": "Atención programada", "texto": "Agenda con anticipación tus servicios, revisiones y mantenimientos."},
+        ],
+        "cierre": "Agradecemos su confianza y preferencia.",
+    },
+    "contactoTexto": {
+        "titulo": "Escríbenos y programa tu servicio",
+        "texto": "El canal más rápido es WhatsApp. Dinos la marca y el modelo de tu vehículo y qué necesitas, y coordinamos contigo.",
+        "sugerencia": "Para ayudarte mejor, cuéntanos: marca y modelo, qué notas en el vehículo y para cuándo quieres programar.",
+    },
+    # PENDIENTES DEL CLIENTE: dejar "" hasta tener el dato real. La UI debe ocultar lo vacío.
+    "pendientes": {"direccion": "", "ciudad": "", "horario": "", "googleBusinessUrl": "", "instagram": "", "facebook": "", "email": ""},
+    "seo": {"sitio": "https://camilovas.github.io/shaddai1-web/", "palabrasClave": ["taller mecánico", "mecánica automotriz multimarcas", "escaneo automotriz", "reprogramación ECU", "mantenimiento preventivo y correctivo"]},
+})
+
+MKT = {
+    "mecanica-general": {
+        "titular": "Mecánica general para vehículos de todas las marcas",
+        "problema": "Ruidos, vibraciones, frenos distintos o un carro que ya no responde como antes: revisarlo a tiempo evita que el daño crezca.",
+        "beneficios": ["Revisión de los sistemas mecánicos de tu vehículo", "Atención para cualquier marca", "Te explicamos lo que encontramos"],
+        "waMensaje": "Hola Shaddai 1, quisiera programar una revisión de mecánica general para mi vehículo (marca y modelo: ___).",
+        "cta": "Programar revisión mecánica",
+        "faq": [
+            {"p": "¿Atienden todas las marcas?", "r": "Somos un taller multimarcas. Escríbenos la marca y el modelo de tu vehículo y te confirmamos por WhatsApp."},
+            {"p": "¿Cómo programo una revisión?", "r": "Escríbenos por WhatsApp al 300 145 80 18 e indícanos qué notas en tu vehículo. Te invitamos a programar con anticipación."},
+            {"p": "¿Qué pasa si no sé qué tiene mi carro?", "r": "No hace falta saberlo. Cuéntanos los síntomas (ruidos, vibraciones, calentamiento) y lo revisamos."},
+        ],
+    },
+    "escaneo-de-sistemas": {
+        "titular": "Escaneo de sistemas: encuentra la falla sin adivinar",
+        "problema": "Se prendió una luz en el tablero o el carro falla y no sabes por qué: el escáner lee los códigos para ubicar el problema.",
+        "beneficios": ["Lectura de códigos de falla de los sistemas electrónicos", "Ayuda a ubicar el problema antes de cambiar piezas", "Útil antes de comprar un vehículo usado"],
+        "waMensaje": "Hola Shaddai 1, se me encendió una luz en el tablero y quisiera programar un escaneo de sistemas (marca y modelo: ___).",
+        "cta": "Programar escaneo",
+        "faq": [
+            {"p": "¿Para qué sirve el escaneo de sistemas?", "r": "Lee los códigos de falla guardados por los módulos electrónicos del vehículo, lo que orienta el diagnóstico."},
+            {"p": "¿Por qué se enciende la luz de «check engine»?", "r": "Puede deberse a causas muy distintas. El escaneo es el primer paso para saber cuál es en tu caso."},
+            {"p": "¿Sirve para mi marca?", "r": "Atendemos multimarcas. Escríbenos marca y modelo y confirmamos contigo por WhatsApp."},
+            {"p": "¿Borrar el código arregla el problema?", "r": "No necesariamente: el código indica dónde buscar; si la causa sigue, la luz puede volver a encenderse."},
+        ],
+    },
+    "reprogramacion": {
+        "titular": "Reprogramación de módulos electrónicos",
+        "problema": "Tras cambiar un módulo o sensor, o ante fallas que se resuelven por software, el vehículo puede necesitar programación.",
+        "beneficios": ["Programación y actualización de la ECU cuando el diagnóstico lo requiere", "Diagnóstico previo del sistema electrónico", "Adaptación tras cambiar un módulo o sensor"],
+        "waMensaje": "Hola Shaddai 1, quisiera consultar por reprogramación de módulos para mi vehículo (marca, modelo y qué necesito: ___).",
+        "cta": "Consultar reprogramación",
+        "faq": [
+            {"p": "¿Qué es reprogramar una ECU?", "r": "Es cargar o actualizar el software de la unidad de control del vehículo, o adaptarla tras un cambio de módulo."},
+            {"p": "¿Mi vehículo la necesita?", "r": "Depende del caso. Normalmente se parte de un diagnóstico; cuéntanos por WhatsApp qué ocurre."},
+            {"p": "¿Debo programar con anticipación?", "r": "Sí, te invitamos a coordinar con tiempo para poder atenderte oportunamente."},
+        ],
+    },
+    "mantenimiento-preventivo-y-correctivo": {
+        "titular": "Mantenimiento preventivo y correctivo para tu vehículo",
+        "problema": "Esperar a que el carro falle suele salir más caro: el preventivo cuida antes del daño y el correctivo repara lo que ya falló.",
+        "beneficios": ["Revisión periódica de niveles, frenos, correas y mangueras", "Reparación de los daños detectados", "Recomendaciones según el estado de tu carro"],
+        "waMensaje": "Hola Shaddai 1, quisiera programar un mantenimiento para mi vehículo (marca, modelo y kilometraje: ___).",
+        "cta": "Programar mantenimiento",
+        "faq": [
+            {"p": "¿Cuál es la diferencia entre preventivo y correctivo?", "r": "El preventivo se hace antes de que algo falle; el correctivo repara lo que ya se dañó."},
+            {"p": "¿Cada cuánto debo hacer el mantenimiento?", "r": "Depende de tu vehículo y de su manual. Escríbenos y te orientamos según tu caso."},
+            {"p": "¿Por qué programar con anticipación?", "r": "Nos permite organizar la agenda y atenderte oportunamente."},
+        ],
+    },
+}
+for sv in SERVICIOS:
+    sv.update(MKT[sv["slug"]])
+
+HEROES = {
+    1: {"titular": "Tu carro en buenas manos. Programa hoy.", "subtitulo": "Mecánica multimarcas, escaneo y reprogramación. Agenda por WhatsApp."},
+    2: {"titular": "Un taller claro y confiable para tu vehículo", "subtitulo": "Revisión, diagnóstico y mantenimiento de todas las marcas. Coordina por WhatsApp."},
+    3: {"titular": "Diagnóstico preciso, sin adivinar", "subtitulo": "Escaneo de sistemas, reprogramación y mecánica multimarcas. Programa tu revisión."},
+}
+for pr in PROPUESTAS:
+    pr["hero"] = HEROES[pr["id"]]
+
 (ROOT / "src" / "content.json").write_text(
     json.dumps({"negocio": NEGOCIO, "servicios": SERVICIOS, "propuestas": PROPUESTAS}, ensure_ascii=False, indent=2),
     encoding="utf-8")
