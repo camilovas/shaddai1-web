@@ -1,0 +1,50 @@
+{
+  "taller": {
+    "titulo": "Car Restoration Workshop (Unsplash).jpg",
+    "autor": "Igor Ovsyannykov igorovsyannykov",
+    "licencia": "CC0",
+    "fuente": "https://commons.wikimedia.org/wiki/File:Car_Restoration_Workshop_(Unsplash).jpg"
+  },
+  "banco": {
+    "titulo": "Car mechanic's workbench (Unsplash).jpg",
+    "autor": "AJ  Yorio lightninghorse",
+    "licencia": "CC0",
+    "fuente": "https://commons.wikimedia.org/wiki/File:Car_mechanic%27s_workbench_(Unsplash).jpg"
+  },
+  "general": {
+    "titulo": "Mechanic works on machine at an automotive service center.jpg",
+    "autor": "Shixart1985",
+    "licencia": "CC BY 2.0",
+    "fuente": "https://commons.wikimedia.org/wiki/File:Mechanic_works_on_machine_at_an_automotive_service_center.jpg"
+  },
+  "escaneo": {
+    "titulo": "Man holding Obd2 jack for car software diagnostic.jpg",
+    "autor": "Nenad Stojkovic",
+    "licencia": "CC BY 2.0",
+    "fuente": "https://commons.wikimedia.org/wiki/File:Man_holding_Obd2_jack_for_car_software_diagnostic.jpg"
+  },
+  "reprogramacion": {
+    "titulo": "ECU and wire bundles.JPG",
+    "autor": "Snewkirk7953",
+    "licencia": "CC BY-SA 3.0",
+    "fuente": "https://commons.wikimedia.org/wiki/File:ECU_and_wire_bundles.JPG"
+  },
+  "preventivo": {
+    "titulo": "Car mechanic checking oil levels.jpg",
+    "autor": "Shixart1985",
+    "licencia": "CC BY 2.0",
+    "fuente": "https://commons.wikimedia.org/wiki/File:Car_mechanic_checking_oil_levels.jpg"
+  },
+  "aceite": {
+    "titulo": "Checking the oil level in a car engine.jpg",
+    "autor": "Shixart1985",
+    "licencia": "CC BY 2.0",
+    "fuente": "https://commons.wikimedia.org/wiki/File:Checking_the_oil_level_in_a_car_engine.jpg"
+  },
+  "motor": {
+    "titulo": "Engine bay of Merkur XR4Ti.jpg",
+    "autor": "Greg Gjerdingen from United States",
+    "licencia": "CC BY 2.0",
+    "fuente": "https://commons.wikimedia.org/wiki/File:Engine_bay_of_Merkur_XR4Ti.jpg"
+  }
+}
