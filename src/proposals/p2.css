@@ -2,7 +2,7 @@
 .p2 h1,.p2 h2,.p2 h3{line-height:1.12;letter-spacing:-.015em;font-weight:800}
 .p2-wrap{max-width:1120px;margin:0 auto;padding-inline:16px}
 .p2-pad{padding-block:2.5rem}
-.p2 a{color:inherit}
+.p2 :where(a){color:inherit}
 
 .p2-head{background:var(--ink);color:#fff;border-top:6px solid var(--red);position:sticky;top:0;z-index:40}
 .p2-head-in{display:flex;flex-direction:column;gap:.3rem;padding-block:.6rem}
