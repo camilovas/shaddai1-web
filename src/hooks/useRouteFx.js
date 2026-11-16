@@ -26,6 +26,11 @@ export default function useRouteFx() {
       first.current = false;
       return;
     }
+    // Sin View Transitions (p. ej. Firefox/Safari antiguos): entrada suave de la página con Web Animations.
+    const main = document.getElementById("main");
+    if (main && !document.startViewTransition && main.animate && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      main.animate([{ opacity: 0, transform: "translateY(14px)" }, { opacity: 1, transform: "none" }], { duration: 450, easing: "cubic-bezier(.22,1,.36,1)" });
+    }
     const t = document.querySelector("main h1") || document.getElementById("main");
     if (!t) return;
     if (!t.hasAttribute("tabindex")) t.setAttribute("tabindex", "-1");

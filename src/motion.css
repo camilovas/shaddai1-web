@@ -1,0 +1,74 @@
+/* ===== Movimiento: entradas, micro-interacciones y detalles sutiles =====
+   Todo se apaga con prefers-reduced-motion (regla global en base.css: animation/transition none !important).
+   Solo se animan opacity y transform (sin provocar CLS). El h1 y las imágenes principales NO se animan (no afectan el LCP). */
+:root{--ease-out:cubic-bezier(.22,1,.36,1);--ease-in-out:cubic-bezier(.65,0,.35,1)}
+
+@keyframes fx-up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes fx-pop{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes fx-down{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@keyframes fx-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}}
+@keyframes fx-ring{0%{box-shadow:0 6px 20px rgba(0,0,0,.45),0 0 0 0 rgba(37,211,102,.55)}9%{box-shadow:0 6px 20px rgba(0,0,0,.45),0 0 0 14px rgba(37,211,102,0)}100%{box-shadow:0 6px 20px rgba(0,0,0,.45),0 0 0 0 rgba(37,211,102,0)}}
+@keyframes fx-drift{from{transform:scale(1)}to{transform:scale(1.07)}}
+
+/* 1) Entrada del hero al cargar: lo que sigue al <h1> aparece escalonado (el h1 no se anima para no retrasar el LCP) */
+main>section:first-child h1~*{animation:fx-up .8s var(--ease-out) backwards}
+main>section:first-child h1~*:nth-child(n+2){animation-delay:.1s}
+main>section:first-child h1~*:nth-child(n+3){animation-delay:.2s}
+main>section:first-child h1~*:nth-child(n+4){animation-delay:.3s}
+
+/* 2) Listas y tarjetas: aparecen escalonadas cuando su sección se revela */
+.js-fx .fx-r.fx-in :is(ul,ol)>li{animation:fx-pop .7s var(--ease-out) backwards}
+.js-fx .fx-r.fx-in :is(ul,ol)>li:nth-child(2){animation-delay:.08s}
+.js-fx .fx-r.fx-in :is(ul,ol)>li:nth-child(3){animation-delay:.16s}
+.js-fx .fx-r.fx-in :is(ul,ol)>li:nth-child(4){animation-delay:.24s}
+.js-fx .fx-r.fx-in :is(ul,ol)>li:nth-child(5){animation-delay:.32s}
+.js-fx .fx-r.fx-in :is(ul,ol)>li:nth-child(n+6){animation-delay:.4s}
+
+/* 3) Selector de propuestas y 404 */
+.chooser-head>*{animation:fx-up .8s var(--ease-out) backwards}
+.chooser-head>:nth-child(2){animation-delay:.08s}.chooser-head>:nth-child(3){animation-delay:.16s}
+.chooser>ul>li{animation:fx-pop .8s var(--ease-out) backwards;animation-delay:.25s}
+.chooser>ul>li:nth-child(2){animation-delay:.38s}.chooser>ul>li:nth-child(3){animation-delay:.51s}
+.chooser-shot img{transition:transform .7s var(--ease-out)}
+.chooser-card:hover .chooser-shot img,.chooser-card:focus-within .chooser-shot img{transform:scale(1.05)}
+
+/* 4) Tarjetas: elevación suave, zoom de foto y flecha que avanza */
+main :is(.p1-card,.p2-card,.p3-row,.sb-card,.chooser-card){transition:transform .35s var(--ease-out),box-shadow .35s var(--ease-out),border-color .25s,background-color .25s}
+.p2-card picture{overflow:hidden}
+.p2-card img{transition:transform .7s var(--ease-out)}
+.p2-card:hover img,.p2-card:focus-visible img{transform:scale(1.06)}
+.p1-more,.p2-card-b>span,.p3-arrow{display:inline-block;transition:transform .3s var(--ease-out)}
+.p1-card:hover .p1-more,.p2-card:hover .p2-card-b>span,.p3-row:hover .p3-arrow,.p1-card:focus-visible .p1-more,.p3-row:focus-visible .p3-arrow{transform:translateX(6px)}
+.p3-row:hover{transform:translateX(4px)}
+.p1-card-ic svg,.p3-row-ic svg,.p2-card h3 svg{transition:transform .4s var(--ease-out)}
+.p1-card:hover .p1-card-ic svg,.p3-row:hover .p3-row-ic svg,.p2-card:hover h3 svg{transform:scale(1.15) rotate(-6deg)}
+
+/* 5) Botones: brillo y pulsación */
+main :is(.p1-btn,.p2-btn,.p3-btn,.sb-btn,.chooser-go,.wz-submit){transition:transform .25s var(--ease-out),filter .2s,background-color .2s,box-shadow .25s}
+:is(.p1-btn,.p2-btn,.p3-btn,.sb-btn,.chooser-go):hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(0,0,0,.28)}
+:is(.p1-btn,.p2-btn,.p3-btn,.sb-btn,.chooser-go,.fab):active{transform:translateY(0) scale(.97)}
+
+/* 6) Botón de WhatsApp: anillo suave que invita a escribir (un pulso cada ~7 s) */
+.fab{animation:fx-ring 7s ease-out 3s infinite}
+.fab:hover{animation-play-state:paused}
+
+/* 7) Hero de la Postal: acercamiento lento de la foto (la imagen no se oculta, no afecta el LCP) */
+.p1-hero-bg img{animation:fx-drift 22s var(--ease-in-out) infinite alternate;transform-origin:60% 50%}
+
+/* 8) Menú móvil, FAQ y cambiador de propuesta: despliegue suave */
+.mn-m[open]>ul{animation:fx-down .22s var(--ease-out) backwards}
+.sb-faq details[open]>p{animation:fx-down .3s var(--ease-out) backwards}
+.sb-faq summary::after{transition:transform .25s var(--ease-out)}
+.sb-faq details[open] summary::after{transform:rotate(180deg)}
+.psw[open]>nav{animation:fx-down .22s var(--ease-out) backwards;transform-origin:bottom left}
+
+/* 9) Asistente de WhatsApp: errores con vaivén corto y foco más vivo */
+.wz-f.has-err{animation:fx-shake .4s var(--ease-out)}
+.wz-err{animation:fx-down .25s var(--ease-out) backwards}
+.wz input,.wz select,.wz textarea{transition:border-color .2s,box-shadow .2s}
+.wz input:focus,.wz select:focus,.wz textarea:focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--acc) 35%,transparent)}
+
+/* 10) Enlaces de navegación: subrayado que crece */
+.p1-nav a,.mn-d a{position:relative}
+.mn-d a::after{content:"";position:absolute;left:.85rem;right:.85rem;bottom:.3rem;height:2px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease-out)}
+.mn-d a:hover::after{transform:scaleX(1)}

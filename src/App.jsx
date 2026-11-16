@@ -4,6 +4,7 @@ import { propuestas, servicios, negocio, metaFor, path, waUrl, BASE } from "./co
 import Fx from "./components/fx/Fx.jsx";
 import "./base.css";
 import "./fx.css";
+import "./motion.css";
 import * as P1 from "./proposals/P1.jsx";
 import * as P2 from "./proposals/P2.jsx";
 import * as P3 from "./proposals/P3.jsx";

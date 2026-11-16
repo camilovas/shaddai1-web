@@ -5,11 +5,15 @@
 main h1[tabindex="-1"]:focus,main[tabindex="-1"]:focus{outline:none}
 
 /* Revelado al scroll: solo JS añade .fx-r (y html.js-fx) */
-.js-fx .fx-r{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease}
+.js-fx .fx-r{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1);will-change:opacity,transform}
 .js-fx .fx-r.fx-in{opacity:1;transform:none}
 
 /* Transiciones de página */
-::view-transition-old(root),::view-transition-new(root){animation-duration:.2s}
+::view-transition-old(root){animation:vt-out .25s cubic-bezier(.4,0,1,1) both}
+::view-transition-new(root){animation:vt-in .45s cubic-bezier(.22,1,.36,1) both}
+@keyframes vt-out{to{opacity:0;transform:translateY(-8px)}}
+@keyframes vt-in{from{opacity:0;transform:translateY(16px)}}
+.p1-head,.p2-head,.p3-head{view-transition-name:hdr}
 .fab{view-transition-name:fab}
 .psw{view-transition-name:psw}
 .fx-prog{view-transition-name:fxprog}
